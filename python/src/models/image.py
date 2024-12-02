@@ -20,6 +20,38 @@ class Pixel(BaseModel):
     green: int
     blue: int
 
+    @staticmethod
+    def white() -> 'Pixel':
+        """ Initialize a white pixel.
+        
+            Author:
+                Benedikt Schwering <bes9584@thi.de>
+            
+            Returns:
+                Pixel: White pixel.
+        """
+        return Pixel(
+            red=255,
+            green=255,
+            blue=255,
+        )
+
+    @staticmethod
+    def black() -> 'Pixel':
+        """ Initialize a black pixel.
+        
+            Author:
+                Benedikt Schwering <bes9584@thi.de>
+            
+            Returns:
+                Pixel: Black pixel.
+        """
+        return Pixel(
+            red=0,
+            green=0,
+            blue=0,
+        )
+
 class Image(BaseModel):
     """ Image class for the project.
 

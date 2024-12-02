@@ -21,12 +21,20 @@ def cli():
     help='Background Subtraction on a set of images.'
 )
 @click.option(
-    '--delta',
-    '-d',
+    '--threshold',
+    '-t',
     type=float,
-    default=25.0,
+    default=7.0,
     show_default=True,
     help='Threshold value for background subtraction.'
+)
+@click.argument(
+    'reference_image_file',
+    type=click.Path(
+        exists=True,
+        resolve_path=True,
+    ),
+    required=True,
 )
 @click.argument(
     'image_files',
@@ -37,22 +45,25 @@ def cli():
     required=True,
     nargs=-1,
 )
-def background_subtraction(delta: float, image_files: tuple[str, ...]):
+def background_subtraction(threshold: float, reference_image_file: str, image_files: tuple[str, ...]):
     """ Background Subtraction on a set of images.
 
         Author:
             Benedikt Schwering <bes9584@thi.de>
 
         Args:
-            delta (float): Threshold value for background subtraction.
+            threshold (float): Threshold value for background subtraction.
             image_files (tuple[str, ...]): List of image files.
     """
+    reference_image_path = Path(reference_image_file)
+
     for image_file in image_files:
         # Convert the image file to a Path object.
         image_path = Path(image_file)
 
         background_subtraction_algorithm(
-            delta=delta,
-            input_path=image_path,
-            output_path=image_path.parent / f'background_subtraction_{image_path.name}',
+            threshold=threshold,
+            reference_image_path=reference_image_path,
+            input_image_path=image_path,
+            output_image_path=image_path.parent / f'background_subtraction_{image_path.name}',
         )
