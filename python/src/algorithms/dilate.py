@@ -15,14 +15,14 @@ from pathlib import Path
 WHITE_PIXEL = Pixel.white()
 BLACK_PIXEL = Pixel.black()
 
-def erode(radius: int, input_image_path: Path, output_image_path: Path):
-    """ Apply Erosion on an image.
+def dilate(radius: int, input_image_path: Path, output_image_path: Path):
+    """ Apply Dilation on an image.
 
         Author:
             Benedikt Schwering <bes9584@thi.de>
 
         Args:
-            radius (int): Radius value for erosion.
+            radius (int): Radius value for dilation.
             input_path (Path): Input path for image file.
             output_path (Path): Output path for image file.
     """
@@ -47,16 +47,16 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
                 radius=radius,
             )
 
-            # Check if any neighbor pixels is black.
+            # Check if any neighbor pixels is white.
             if any(
-                pixel.is_black()
+                pixel.is_white()
                     for pixel in neighbor_pixels
             ):
-                # Set the pixel to black.
-                output_image.pixels[row][column] = BLACK_PIXEL
-            else:
                 # Set the pixel to white.
                 output_image.pixels[row][column] = WHITE_PIXEL
+            else:
+                # Set the pixel to black.
+                output_image.pixels[row][column] = BLACK_PIXEL
 
     # Save the image to the output path.
     save_project_image(

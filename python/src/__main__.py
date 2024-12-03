@@ -9,6 +9,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.algorithms.background_subtraction import background_subtraction as background_subtraction_algorithm
+from src.algorithms.dilate import dilate as dilate_algorithm
 from src.algorithms.erode import erode as erode_algorithm
 from pathlib import Path
 import click
@@ -111,4 +112,46 @@ def erode(radius: int, image_files: tuple[str, ...]):
             radius=radius,
             input_image_path=image_path,
             output_image_path=image_path.parent / f'erode_{image_path.name}',
+        )
+
+@cli.command(
+    name='dilate',
+    help='Dilate a set of images.'
+)
+@click.option(
+    '--radius',
+    '-r',
+    type=int,
+    default=2,
+    show_default=True,
+    help='Radius value for dilation.'
+)
+@click.argument(
+    'image_files',
+    type=click.Path(
+        exists=True,
+        resolve_path=True,
+    ),
+    required=True,
+    nargs=-1,
+)
+def dilate(radius: int, image_files: tuple[str, ...]):
+    """ Dilate a set of images.
+
+        Author:
+            Benedikt Schwering <bes9584@thi.de>
+
+        Args:
+            radius (int): Radius value for dilation.
+            image_files (tuple[str, ...]): List of image files.
+    """
+    for image_file in image_files:
+        # Convert the image file to a Path object.
+        image_path = Path(image_file)
+
+        # Perform dilation on the image.
+        dilate_algorithm(
+            radius=radius,
+            input_image_path=image_path,
+            output_image_path=image_path.parent / f'dilate_{image_path.name}',
         )
