@@ -102,3 +102,40 @@ def save_project_image(image_path: Path, project_image: Image):
     pil_image.save(
         fp=image_path,
     )
+
+def get_neighbor_pixels(image: Image, radius: int, row: int, column: int) -> list[Pixel]:
+    """ Get the neighbor pixels of a pixel in an image.
+
+        Author:
+            Benedikt Schwering <bes9584@thi.de>
+
+        Args:
+            image (Image): Reference Image.
+            radius (int): Radius value.
+            row (int): Row value for the reference pixel.
+            column (int): Column value for the reference pixel.
+
+        Returns:
+            list[Pixel]: Neighbor pixels.
+    """
+    # Get the width and height of the image.
+    width = image.width
+    height = image.height
+
+    # Initialize the neighbor pixels list.
+    neighbor_pixels: list[Pixel] = []
+
+    # Iterate over the rows and columns of the image.
+    for i in range(-radius, radius + 1):
+        for j in range(-radius, radius + 1):
+            # Calculate the new row and column values.
+            neighbor_row = row + i
+            neighbor_column = column + j
+
+            # Check if the new row and column values are within the image bounds.
+            if 0 <= neighbor_row < height and 0 <= neighbor_column < width:
+                # Append the pixel to the neighbor pixels list.
+                neighbor_pixels.append(image.pixels[neighbor_row][neighbor_column])
+
+    # Return the neighbor pixels list.
+    return neighbor_pixels

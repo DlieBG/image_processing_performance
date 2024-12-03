@@ -52,6 +52,28 @@ class Pixel(BaseModel):
             blue=0,
         )
 
+    def is_white(self) -> bool:
+        """ Check if the pixel is white.
+
+            Author:
+                Benedikt Schwering <bes9584@thi.de>
+
+            Returns:
+                bool: True if the pixel is white, False otherwise.
+        """
+        return self.red == 255 and self.green == 255 and self.blue == 255
+    
+    def is_black(self) -> bool:
+        """ Check if the pixel is black.
+
+            Author:
+                Benedikt Schwering <bes9584@thi.de>
+
+            Returns:
+                bool: True if the pixel is black, False otherwise.
+        """
+        return self.red == 0 and self.green == 0 and self.blue == 0
+
 class Image(BaseModel):
     """ Image class for the project.
 

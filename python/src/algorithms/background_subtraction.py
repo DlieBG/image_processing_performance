@@ -16,15 +16,15 @@ WHITE_PIXEL = Pixel.white()
 BLACK_PIXEL = Pixel.black()
 
 def background_subtraction(threshold: float, reference_image_path: Path, input_image_path: Path, output_image_path: Path):
-    """ Background Subtraction on a set of images.
+    """ Apply Background Subtraction on an image.
 
         Author:
             Benedikt Schwering <bes9584@thi.de>
 
         Args:
             threshold (float): Threshold value for background subtraction.
-            input_path (Path): Input path for image files.
-            output_path (Path): Output path for image files.
+            input_path (Path): Input path for image file.
+            output_path (Path): Output path for image file.
 
         Raises:
             ValueError: If the reference image and the input image do not have the same dimensions.
