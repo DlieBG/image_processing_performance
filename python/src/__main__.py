@@ -30,6 +30,14 @@ def cli():
     show_default=True,
     help='Threshold value for background subtraction.'
 )
+@click.option(
+    '--hsv',
+    '-h',
+    is_flag=True,
+    default=False,
+    show_default=True,
+    help='HSV mode for background subtraction.'
+)
 @click.argument(
     'reference_image_file',
     type=click.Path(
@@ -47,7 +55,7 @@ def cli():
     required=True,
     nargs=-1,
 )
-def background_subtraction(threshold: float, reference_image_file: str, image_files: tuple[str, ...]):
+def background_subtraction(threshold: float, hsv: bool, reference_image_file: str, image_files: tuple[str, ...]):
     """ Background Subtraction on a set of images.
 
         Author:
@@ -67,6 +75,7 @@ def background_subtraction(threshold: float, reference_image_file: str, image_fi
         # Perform background subtraction on the image.
         background_subtraction_algorithm(
             threshold=threshold,
+            hsv=hsv,
             reference_image_path=reference_image_path,
             input_image_path=image_path,
             output_image_path=image_path.parent / f'background_subtraction_{image_path.name}',

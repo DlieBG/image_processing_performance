@@ -8,6 +8,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
+from src.utils.hsv_pixel import rgb_to_hsv_pixel, weighted_hsv_distance
 from src.utils.image import open_project_image, save_project_image
 from src.models.image import Pixel
 from pathlib import Path
@@ -15,7 +16,7 @@ from pathlib import Path
 WHITE_PIXEL = Pixel.white()
 BLACK_PIXEL = Pixel.black()
 
-def background_subtraction(threshold: float, reference_image_path: Path, input_image_path: Path, output_image_path: Path):
+def background_subtraction(threshold: float, hsv: bool, reference_image_path: Path, input_image_path: Path, output_image_path: Path):
     """ Apply Background Subtraction on an image.
 
         Author:
@@ -47,8 +48,26 @@ def background_subtraction(threshold: float, reference_image_path: Path, input_i
             reference_pixel = reference_image.pixels[row][column]
             pixel = image.pixels[row][column]
 
-            # Calculate the difference between the pixel values.
-            difference = abs(reference_pixel.red - pixel.red) / 3 + abs(reference_pixel.green - pixel.green) / 3 + abs(reference_pixel.blue - pixel.blue) / 3
+            if hsv:
+                # Convert RGB pixels to HSV pixels.
+                reference_hsv_pixel = rgb_to_hsv_pixel(
+                    rgb_pixel=reference_pixel,
+                )
+                hsv_pixel = rgb_to_hsv_pixel(
+                    rgb_pixel=pixel,
+                )
+
+                # Calculate the difference between the HSV pixels.
+                difference = weighted_hsv_distance(
+                    pixel1=reference_hsv_pixel,
+                    pixel2=hsv_pixel,
+                    hue_weight=.6,
+                    saturation_weight=.6,
+                    value_weight=.1,
+                )
+            else:
+                # Calculate the difference between the RGB pixels.
+                difference = abs(reference_pixel.red - pixel.red) / 3 + abs(reference_pixel.green - pixel.green) / 3 + abs(reference_pixel.blue - pixel.blue) / 3
 
             # If the difference is greater than the threshold, set the pixel to white.
             # Otherwise, set the pixel to black.
