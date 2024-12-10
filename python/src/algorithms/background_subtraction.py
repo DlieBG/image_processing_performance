@@ -8,8 +8,8 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.utils.hsv_pixel import rgb_to_hsv_pixel, weighted_hsv_distance
 from src.utils.image import open_project_image, save_project_image
+from src.utils.hsv import rgb_to_hsv_image, weighted_hsv_distance
 from src.models.image import Pixel
 from pathlib import Path
 
@@ -42,30 +42,37 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
     if reference_image.width != image.width or reference_image.height != image.height:
         raise ValueError('The reference image and the input image must have the same dimensions.')
 
+    # Convert the reference image and the input image to HSV if the flag is set.
+    # This provides better time tracking for the algorithm.
+    if hsv:
+        hsv_reference_image = rgb_to_hsv_image(
+            rgb_image=reference_image,
+        )
+        hsv_image = rgb_to_hsv_image(
+            rgb_image=image,
+        )
+
     # Iterate over each pixel in the image.
     for row in range(image.height):
         for column in range(image.width):
-            reference_pixel = reference_image.pixels[row][column]
-            pixel = image.pixels[row][column]
-
+            # Use the HSV pixels if the flag is set.
+            # Otherwise, use the RGB pixels.
             if hsv:
-                # Convert RGB pixels to HSV pixels.
-                reference_hsv_pixel = rgb_to_hsv_pixel(
-                    rgb_pixel=reference_pixel,
-                )
-                hsv_pixel = rgb_to_hsv_pixel(
-                    rgb_pixel=pixel,
-                )
+                hsv_reference_pixel = hsv_reference_image.pixels[row][column]
+                hsv_pixel = hsv_image.pixels[row][column]
 
                 # Calculate the difference between the HSV pixels.
                 difference = weighted_hsv_distance(
-                    pixel1=reference_hsv_pixel,
+                    pixel1=hsv_reference_pixel,
                     pixel2=hsv_pixel,
                     hue_weight=.6,
                     saturation_weight=.6,
                     value_weight=.1,
                 )
             else:
+                reference_pixel = reference_image.pixels[row][column]
+                pixel = image.pixels[row][column]
+
                 # Calculate the difference between the RGB pixels.
                 difference = abs(reference_pixel.red - pixel.red) / 3 + abs(reference_pixel.green - pixel.green) / 3 + abs(reference_pixel.blue - pixel.blue) / 3
 

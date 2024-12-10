@@ -8,8 +8,8 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.models.hsv_pixel import HSVPixel
-from src.models.image import Pixel
+from src.models.hsv import HSVImage, HSVPixel
+from src.models.image import Image, Pixel
 import math
 
 def rgb_to_hsv_pixel(rgb_pixel: Pixel) -> HSVPixel:
@@ -71,6 +71,40 @@ def rgb_to_hsv_pixel(rgb_pixel: Pixel) -> HSVPixel:
         hue=hue,
         saturation=saturation,
         value=value,
+    )
+
+def rgb_to_hsv_image(rgb_image: Image) -> HSVImage:
+    """ Convert an RGB image to an HSV image.
+
+        Author:
+            Benedikt Schwering <bes9584@thi.de>
+
+        Args:
+            rgb_image (Image): RGB image.
+
+        Returns:
+            HSVImage: HSV image.
+    """
+    # Get the width and height of the RGB image.
+    width = rgb_image.width
+    height = rgb_image.height
+
+    # Get the HSV pixels of the RGB image pixels.
+    hsv_pixels = [
+        [
+            rgb_to_hsv_pixel(
+                rgb_pixel=pixel,
+            )
+                for pixel in row
+        ]
+            for row in rgb_image.pixels
+    ]
+
+    # Create a new HSV image and return it.
+    return HSVImage(
+        width=width,
+        height=height,
+        pixels=hsv_pixels,
     )
 
 def weighted_hsv_distance(pixel1: HSVPixel, pixel2: HSVPixel, hue_weight: float = 1, saturation_weight: float = 1, value_weight: float = 1) -> float:

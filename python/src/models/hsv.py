@@ -19,3 +19,13 @@ class HSVPixel(BaseModel):
     hue: float
     saturation: float
     value: float
+
+class HSVImage(BaseModel):
+    """ HSV Image class for the project.
+
+        Author:
+            Benedikt Schwering <bes9584@thi.de>
+    """
+    width: int
+    height: int
+    pixels: list[list[HSVPixel]]
