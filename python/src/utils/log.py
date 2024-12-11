@@ -9,13 +9,13 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from rich import print
-import time
+import inspect, time
 
-def log(component: str, layer: int, message: str):
+def log(message: str):
     print(
         f'[blue][{time.process_time()}][/]',
-        f'[red]{layer}[/]',
-        f'[green]({component})[/]',
+        f'[red]{len(inspect.stack()) - 9}[/]',
+        f'[green]({inspect.stack()[1].function})[/]',
         message,
     )
     

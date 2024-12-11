@@ -54,6 +54,7 @@ Die Events auf Layer 1 kann je nach Implementierung variieren.
 | 0 | | finish open image |
 | 0 | | finish hsv conversion |
 | 0 | | finish background subtraction |
+| | 1 | finish create pil image |
 | | 1 | finish reshape flat pixels |
 | | 1 | finish create flat data |
 | | 1 | finish put data to pil image |
@@ -73,6 +74,7 @@ Die Events auf Layer 1 kann je nach Implementierung variieren.
 | 0 | | finish open image |
 | 0 | | finish create output image |
 | 0 | | finish erode |
+| | 1 | finish create pil image |
 | | 1 | finish reshape flat pixels |
 | | 1 | finish create flat data |
 | | 1 | finish put data to pil image |
@@ -92,6 +94,7 @@ Die Events auf Layer 1 kann je nach Implementierung variieren.
 | 0 | | finish open image |
 | 0 | | finish create output image |
 | 0 | | finish dilate |
+| | 1 | finish create pil image |
 | | 1 | finish reshape flat pixels |
 | | 1 | finish create flat data |
 | | 1 | finish put data to pil image |

@@ -35,9 +35,12 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
     reference_image = open_project_image(
         image_path=reference_image_path,
     )
+    log('finish open reference image')
+
     image = open_project_image(
         image_path=input_image_path,
     )
+    log('finish open image')
 
     # Check if the reference image and the input image have the same dimensions.
     if reference_image.width != image.width or reference_image.height != image.height:
@@ -52,11 +55,7 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
         hsv_image = rgb_to_hsv_image(
             rgb_image=image,
         )
-        log(
-            component='background_subtraction',
-            layer=0,
-            message='finish convert rgb to hsv',
-        )
+        log('finish hsv conversion')
 
     # Iterate over each pixel in the image.
     for row in range(image.height):
@@ -88,14 +87,11 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
                 image.pixels[row][column] = WHITE_PIXEL
             else:
                 image.pixels[row][column] = BLACK_PIXEL
-    log(
-        component='background_subtraction',
-        layer=0,
-        message='finish background subtraction algorithm',
-    )
+    log('finish background subtraction')
 
     # Save the image to the output path.
     save_project_image(
         image_path=output_image_path,
         project_image=image,
     )
+    log('finish save image')
