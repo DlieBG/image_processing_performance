@@ -27,6 +27,7 @@ setup(
     entry_points={
         'console_scripts': [
             'ipp_slow = src.slow.main:cli',
+            'ipp_fast = src.fast.main:cli',
         ],
     },
 )

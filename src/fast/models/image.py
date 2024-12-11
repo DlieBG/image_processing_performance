@@ -8,13 +8,14 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from rich import print
-import inspect, time
+from pydantic import BaseModel
 
-def log(message: str):
-    print(
-        f'[blue][{time.process_time()}][/]',
-        f'[red]{len(inspect.stack()) - 9}[/]',
-        f'[green]({inspect.stack()[1].function})[/]',
-        message,
-    )
+class Image(BaseModel):
+    """ Image class for the project.
+    
+        Author:
+            Benedikt Schwering <bes9584@thi.de>
+    """
+    width: int
+    height: int
+    pixels: list[tuple[int, int, int]]
