@@ -8,10 +8,10 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.utils.image import open_project_image, save_project_image
-from src.utils.hsv import rgb_to_hsv_image, weighted_hsv_distance
-from src.models.image import Pixel
-from src.utils.log import log
+from src.slow.utils.image import open_project_image, save_project_image
+from src.slow.utils.hsv import rgb_to_hsv_image, weighted_hsv_distance
+from src.slow.models.image import Pixel
+from src.slow.utils.log import log
 from pathlib import Path
 
 WHITE_PIXEL = Pixel.white()

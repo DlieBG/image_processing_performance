@@ -8,14 +8,19 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.algorithms.background_subtraction import background_subtraction as background_subtraction_algorithm
-from src.algorithms.dilate import dilate as dilate_algorithm
-from src.algorithms.erode import erode as erode_algorithm
+from src.slow.algorithms.background_subtraction import background_subtraction as background_subtraction_algorithm
+from src.slow.algorithms.dilate import dilate as dilate_algorithm
+from src.slow.algorithms.erode import erode as erode_algorithm
 from pathlib import Path
 import click
 
 @click.group()
 def cli():
+    """ Image Processing Performance - Slow Implementation
+
+        Author:
+            Benedikt Schwering <bes9584@thi.de>
+    """
     pass
 
 @cli.command(
