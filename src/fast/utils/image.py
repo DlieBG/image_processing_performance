@@ -42,7 +42,7 @@ def open_project_image(image_path: Path) -> Image:
     return Image(
         width=pil_image.width,
         height=pil_image.height,
-        pixels=list(pil_image.getdata()),
+        pixels=pil_image.getdata(),
     )
 
 def save_project_image(image_path: Path, project_image: Image):

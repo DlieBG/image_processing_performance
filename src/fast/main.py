@@ -8,6 +8,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
+from src.fast.algorithms.background_subtraction import background_subtraction as background_subtraction_algorithm
 from pathlib import Path
 import click
 
@@ -75,7 +76,13 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_file: st
         image_path = Path(image_file)
 
         # Perform background subtraction on the image.
-        # TODO
+        background_subtraction_algorithm(
+            threshold=threshold,
+            hsv=hsv,
+            reference_image_path=reference_image_path,
+            input_image_path=image_path,
+            output_image_path=image_path.parent / f'background_subtraction_{image_path.name}',
+        )
 
 @cli.command(
     name='erode',
