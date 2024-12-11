@@ -9,6 +9,8 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.fast.algorithms.background_subtraction import background_subtraction as background_subtraction_algorithm
+from src.fast.algorithms.dilate import dilate as dilate_algorithm
+from src.fast.algorithms.erode import erode as erode_algorithm
 from pathlib import Path
 import click
 
@@ -120,7 +122,11 @@ def erode(radius: int, image_files: tuple[str, ...]):
         image_path = Path(image_file)
 
         # Perform erosion on the image.
-        # TODO
+        erode_algorithm(
+            radius=radius,
+            input_image_path=image_path,
+            output_image_path=image_path.parent / f'erode_{image_path.name}',
+        )
 
 @cli.command(
     name='dilate',
@@ -158,4 +164,8 @@ def dilate(radius: int, image_files: tuple[str, ...]):
         image_path = Path(image_file)
 
         # Perform dilation on the image.
-        # TODO
+        dilate_algorithm(
+            radius=radius,
+            input_image_path=image_path,
+            output_image_path=image_path.parent / f'dilate_{image_path.name}',
+        )

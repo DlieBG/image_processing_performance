@@ -45,9 +45,9 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
         raise ValueError('The reference image and the input image must have the same dimensions.')
 
     # Iterate over each pixel in the image.
-    for i in range(image.height * image.width):
-        reference_pixel = reference_image.pixels[i]
-        pixel = image.pixels[i]
+    for index in range(image.height * image.width):
+        reference_pixel = reference_image.pixels[index]
+        pixel = image.pixels[index]
 
         # Calculate the difference between the RGB pixels.
         difference = abs(reference_pixel[0] - pixel[0]) / 3 + abs(reference_pixel[1] - pixel[1]) / 3 + abs(reference_pixel[2] - pixel[2]) / 3
@@ -55,9 +55,9 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
         # If the difference is greater than the threshold, set the pixel to white.
         # Otherwise, set the pixel to black.
         if difference > threshold:
-            image.pixels[i] = WHITE_PIXEL
+            image.pixels[index] = WHITE_PIXEL
         else:
-            image.pixels[i] = BLACK_PIXEL
+            image.pixels[index] = BLACK_PIXEL
     log('finish background subtraction')
 
     # Save the image to the output path.
