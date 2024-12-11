@@ -11,6 +11,7 @@ Author Benedikt SCHWERING <bes9584@thi.de>
 from src.utils.image import open_project_image, save_project_image
 from src.utils.hsv import rgb_to_hsv_image, weighted_hsv_distance
 from src.models.image import Pixel
+from src.utils.log import log
 from pathlib import Path
 
 WHITE_PIXEL = Pixel.white()
@@ -34,9 +35,12 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
     reference_image = open_project_image(
         image_path=reference_image_path,
     )
+    log('finish open reference image')
+
     image = open_project_image(
         image_path=input_image_path,
     )
+    log('finish open image')
 
     # Check if the reference image and the input image have the same dimensions.
     if reference_image.width != image.width or reference_image.height != image.height:
@@ -51,6 +55,7 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
         hsv_image = rgb_to_hsv_image(
             rgb_image=image,
         )
+        log('finish hsv conversion')
 
     # Iterate over each pixel in the image.
     for row in range(image.height):
@@ -82,9 +87,11 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
                 image.pixels[row][column] = WHITE_PIXEL
             else:
                 image.pixels[row][column] = BLACK_PIXEL
+    log('finish background subtraction')
 
     # Save the image to the output path.
     save_project_image(
         image_path=output_image_path,
         project_image=image,
     )
+    log('finish save image')

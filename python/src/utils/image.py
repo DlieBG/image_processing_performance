@@ -10,6 +10,7 @@ Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.models.image import Image, Pixel
 from PIL import Image as PILImage
+from src.utils.log import log
 from pathlib import Path
 
 def open_project_image(image_path: Path) -> Image:
@@ -29,17 +30,20 @@ def open_project_image(image_path: Path) -> Image:
         fp=image_path,
         mode='r',
     )
+    log('finish open pil image')
 
     # Convert the image to RGB if it is not already.
     # This is necessary because the image is not always in RGB format.
     # For example, the image could be in RGBA with an alpha channel in PNG format.
     pil_image = pil_image.convert('RGB')
+    log('finish convert pil image')
 
     # Get the width and height of the image.
     width, height = pil_image.size
 
     # Get the flat data of the image.
     flat_data = list(pil_image.getdata())
+    log('finish extract flat data')
 
     # Convert the flat data to a list of pixels.
     flat_pixels = [
@@ -50,12 +54,14 @@ def open_project_image(image_path: Path) -> Image:
         )
             for flat_pixel in flat_data
     ]
+    log('finish create flat pixels')
 
     # Convert the pixels to a two dimensional list.
     pixels = [
         flat_pixels[i:i + width]
             for i in range(0, len(flat_pixels), width)
     ]
+    log('finish reshape pixels')
 
     # Create a new project image and return it.
     return Image(
@@ -79,6 +85,7 @@ def save_project_image(image_path: Path, project_image: Image):
         mode='RGB',
         size=(project_image.width, project_image.height),
     )
+    log('finish create pil image')
 
     # Get the flat pixels of the project image two dimensional pixels.
     flat_pixels = [
@@ -86,22 +93,27 @@ def save_project_image(image_path: Path, project_image: Image):
             for row in project_image.pixels
                 for pixel in row
     ]
+    log('finish reshape flat pixels')
+
 
     # Get the flat data of the project image flat pixels.
     flat_data = [
         (pixel.red, pixel.green, pixel.blue)
             for pixel in flat_pixels
     ]
+    log('finish create flat data')
 
     # Put the flat data into the PIL image.
     pil_image.putdata(
         data=flat_data,
     )
+    log('finish put data to pil image')
 
     # Save the PIL image to the file.
     pil_image.save(
         fp=image_path,
     )
+    log('finish save pil image')
 
 def get_neighbor_pixels(image: Image, radius: int, row: int, column: int) -> list[Pixel]:
     """ Get the neighbor pixels of a pixel in an image.
