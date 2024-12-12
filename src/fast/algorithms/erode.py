@@ -34,13 +34,13 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
 
     # Create an empty project image as output image.
     output_image = create_project_image(
-        width=input_image.width,
-        height=input_image.height,
+        width=input_image[0],
+        height=input_image[1],
     )
     log('finish create output image')
 
     # Iterate over each pixel in the image.
-    for index in range(input_image.height * input_image.width):
+    for index in range(input_image[0] * input_image[1]):
         # Check if any neighbor pixels is black.
         if any_neighbors_equal_pixel(
             image=input_image,
@@ -49,10 +49,10 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
             check_pixel=BLACK_PIXEL,
         ):
             # Set the pixel to black.
-            output_image.pixels[index] = BLACK_PIXEL
+            output_image[2][index] = BLACK_PIXEL
         else:
             # Set the pixel to white.
-            output_image.pixels[index] = WHITE_PIXEL
+            output_image[2][index] = WHITE_PIXEL
     log('finish erode')
 
     # Save the image to the output path.
