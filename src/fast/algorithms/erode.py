@@ -32,10 +32,11 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
     )
     log('finish open image')
 
-    # Create an empty project image as output image.
+    # Create an white project image as output image.
     output_image = create_project_image(
         width=input_image[0],
         height=input_image[1],
+        init_pixel=WHITE_PIXEL,
     )
     log('finish create output image')
 
@@ -50,9 +51,6 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
         ):
             # Set the pixel to black.
             output_image[2][index] = BLACK_PIXEL
-        else:
-            # Set the pixel to white.
-            output_image[2][index] = WHITE_PIXEL
     log('finish erode')
 
     # Save the image to the output path.

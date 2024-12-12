@@ -73,7 +73,7 @@ def save_project_image(image_path: Path, project_image: tuple[int, int, list[tup
     )
     log('finish save pil image')
 
-def create_project_image(width: int, height: int) -> tuple[int, int, list[tuple[int, int, int]]]:
+def create_project_image(width: int, height: int, init_pixel: tuple[int, int, int]) -> tuple[int, int, list[tuple[int, int, int]]]:
     """ Create an empty project image.
 
         Author:
@@ -82,6 +82,7 @@ def create_project_image(width: int, height: int) -> tuple[int, int, list[tuple[
         Args:
             width (int): Width of the image.
             height (int): Height of the image.
+            init_pixel (tuple[int, int, int]): Initial pixel value.
 
         Returns:
             (int, int, list[tuple[int, int, int]]): Width, height and pixels of the project image.
@@ -89,7 +90,7 @@ def create_project_image(width: int, height: int) -> tuple[int, int, list[tuple[
     return (
         width,
         height,
-        [None] * width * height,
+        [init_pixel] * width * height,
     )
 
 def any_neighbors_equal_pixel(image: tuple[int, int, list[tuple[int, int, int]]], radius: int, index: int, check_pixel: tuple[int, int, int]) -> bool:
