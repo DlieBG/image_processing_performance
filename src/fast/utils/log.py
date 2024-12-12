@@ -18,4 +18,3 @@ def log(message: str):
         f'[green]({inspect.stack()[1].function})[/]',
         message,
     )
-    

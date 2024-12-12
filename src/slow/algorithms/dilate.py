@@ -8,9 +8,9 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.utils.image import open_project_image, save_project_image, get_neighbor_pixels
-from src.models.image import Pixel
-from src.utils.log import log
+from src.slow.utils.image import open_project_image, save_project_image, get_neighbor_pixels
+from src.slow.models.image import Pixel
+from src.slow.utils.log import log
 from pathlib import Path
 
 WHITE_PIXEL = Pixel.white()

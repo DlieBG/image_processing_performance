@@ -8,8 +8,8 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.models.hsv import HSVImage, HSVPixel
-from src.models.image import Image, Pixel
+from src.slow.models.hsv import HSVImage, HSVPixel
+from src.slow.models.image import Image, Pixel
 import math
 
 def rgb_to_hsv_pixel(rgb_pixel: Pixel) -> HSVPixel:

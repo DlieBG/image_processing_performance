@@ -8,13 +8,12 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.utils.image import open_project_image, save_project_image, get_neighbor_pixels
-from src.models.image import Pixel
-from src.utils.log import log
+from src.fast.utils.image import open_project_image, save_project_image, create_project_image, any_neighbors_equal_pixel
+from src.fast.utils.log import log
 from pathlib import Path
 
-WHITE_PIXEL = Pixel.white()
-BLACK_PIXEL = Pixel.black()
+WHITE_PIXEL = (255, 255, 255)
+BLACK_PIXEL = (0, 0, 0)
 
 def erode(radius: int, input_image_path: Path, output_image_path: Path):
     """ Apply Erosion on an image.
@@ -33,33 +32,25 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
     )
     log('finish open image')
 
-    # Create a copy of the input input image as output image.
-    output_image = input_image.model_copy(
-        deep=True,
+    # Create an white project image as output image.
+    output_image = create_project_image(
+        width=input_image[0],
+        height=input_image[1],
+        init_pixel=WHITE_PIXEL,
     )
     log('finish create output image')
 
     # Iterate over each pixel in the image.
-    for row in range(input_image.height):
-        for column in range(input_image.width):
-            # Get the neighbor pixels of the current pixel.
-            neighbor_pixels = get_neighbor_pixels(
-                image=input_image,
-                row=row,
-                column=column,
-                radius=radius,
-            )
-
-            # Check if any neighbor pixels is black.
-            if any(
-                pixel.is_black()
-                    for pixel in neighbor_pixels
-            ):
-                # Set the pixel to black.
-                output_image.pixels[row][column] = BLACK_PIXEL
-            else:
-                # Set the pixel to white.
-                output_image.pixels[row][column] = WHITE_PIXEL
+    for index in range(input_image[0] * input_image[1]):
+        # Check if any neighbor pixels is black.
+        if any_neighbors_equal_pixel(
+            image=input_image,
+            radius=radius,
+            index=index,
+            check_pixel=BLACK_PIXEL,
+        ):
+            # Set the pixel to black.
+            output_image[2][index] = BLACK_PIXEL
     log('finish erode')
 
     # Save the image to the output path.

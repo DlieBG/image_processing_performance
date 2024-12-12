@@ -8,9 +8,9 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.models.image import Image, Pixel
+from src.slow.models.image import Image, Pixel
+from src.slow.utils.log import log
 from PIL import Image as PILImage
-from src.utils.log import log
 from pathlib import Path
 
 def open_project_image(image_path: Path) -> Image:

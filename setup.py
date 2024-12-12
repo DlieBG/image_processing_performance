@@ -12,7 +12,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='image_processing_performance',
-    version='0.1.0',
+    version='0.1.1',
     description='Image Processing Performance Python Tools',
     author='Benedikt Schwering',
     author_email='bes9584@thi.de',
@@ -26,7 +26,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'ipp_python = src.__main__:cli',
+            'ipp_slow = src.slow.main:cli',
+            'ipp_fast = src.fast.main:cli',
         ],
     },
 )
