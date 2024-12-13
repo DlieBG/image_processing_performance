@@ -24,8 +24,8 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
 
         Args:
             radius (int): Radius value for erosion.
-            input_path (Path): Input path for image file.
-            output_path (Path): Output path for image file.
+            input_image_path (Path): Input path for image file.
+            output_image_path (Path): Output path for image file.
     """
     # Open the input image.
     input_image = open_project_image(
