@@ -24,15 +24,14 @@ def convert_to_dataframe(time_tracking_file: Path) -> pd.DataFrame:
         Returns:
             pd.DataFrame: Time tracking file as pandas DataFrame.
     """
-    indices = []
+    # Initialize empty lists
     timestamps = []
     layers = []
     modules = []
     messages = []
 
     # Iterate over each line in the time tracking file
-    for i, line in enumerate(time_tracking_file.read_text().splitlines()):
-        indices.append(i)
+    for line in time_tracking_file.read_text().splitlines():
         timestamps.append(
             float(re.findall(r'(?<=\[)\d+\.\d+(?=\])', line)[0])
         )
@@ -48,25 +47,8 @@ def convert_to_dataframe(time_tracking_file: Path) -> pd.DataFrame:
 
     # Create and return pandas DataFrame
     return pd.DataFrame({
-        'Index': indices,
         'Layer': layers,
         'Module': modules,
         'Message': messages,
         'Timestamp': timestamps,
     })
-    
-def merge_all(dataframes: list[pd.DataFrame]) -> pd.DataFrame:
-    dataframe = dataframes[0]
-    dataframe = dataframe[dataframe['Layer'] == 0]
-
-    for i, df in enumerate(dataframes[1:]):
-        df = df[df['Layer'] == 0]
-        dataframe = pd.merge(
-            dataframe,
-            df[['Layer', 'Module', 'Message', 'Timestamp']],
-            on=['Layer', 'Module', 'Message'],
-            how='left',
-            suffixes=('', f'_{i}'),
-        )
-
-    return dataframe.sort_values(by=['Timestamp'])

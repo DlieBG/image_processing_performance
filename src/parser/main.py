@@ -44,8 +44,6 @@ def parse(time_tracking_files: tuple[str, ...]):
         Args:
             time_tracking_files (tuple[str, ...]): Time tracking files to parse.
     """
-    dataframes = []
-
     with pd.ExcelWriter('out.xlsx') as writer:
         # Iterate over time tracking files
         for time_tracking_file in time_tracking_files:
@@ -53,19 +51,10 @@ def parse(time_tracking_files: tuple[str, ...]):
             time_tracking_file = Path(time_tracking_file)
 
             # Convert to DataFrame and write to Excel
-            df = convert_to_dataframe(
+            convert_to_dataframe(
                 time_tracking_file=time_tracking_file,
-            )
-            df.to_excel(
+            ).to_excel(
                 writer,
                 sheet_name=Path(time_tracking_file).name,
                 index=False,
             )
-
-            dataframes.append(df)
-
-        merge_all(dataframes).to_excel(
-            writer,
-            sheet_name='Merged',
-            index=False,
-        )
