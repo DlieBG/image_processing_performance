@@ -1,4 +1,6 @@
 pydantic
+openpyxl
 pillow
+pandas
 click
 rich

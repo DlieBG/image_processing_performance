@@ -12,7 +12,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='image_processing_performance',
-    version='0.1.1',
+    version='0.1.2',
     description='Image Processing Performance Python Tools',
     author='Benedikt Schwering',
     author_email='bes9584@thi.de',
@@ -20,7 +20,9 @@ setup(
     packages=find_packages(),
     install_requires=[
         'pydantic',
+        'openpyxl',
         'pillow',
+        'pandas',
         'click',
         'rich',
     ],
@@ -28,6 +30,7 @@ setup(
         'console_scripts': [
             'ipp_slow = src.slow.main:cli',
             'ipp_fast = src.fast.main:cli',
+            'ipp_parser = src.parser.main:cli',
         ],
     },
 )
