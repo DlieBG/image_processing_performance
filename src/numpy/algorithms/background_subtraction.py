@@ -9,12 +9,12 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.numpy.utils.image import open_project_image, save_project_image
-from src.numpy.utils.hsv import rgb_to_hsv_image, weighted_hsv_distance
 from joblib import Parallel, delayed
 from src.numpy.utils.log import log
-from pathlib import Path
 import numpy.typing as npt
+from pathlib import Path
 import numpy as np
+import cv2
 
 WHITE_PIXEL = [255, 255, 255]
 
@@ -33,14 +33,39 @@ def __process_chunk(threshold: float, hsv: bool, reference_image_chunk, image_ch
         Returns:
             np.array: Processed chunk of the image.
     """
-    # Calculate the difference between the RGB pixels.
-    # Convert the pixel to int16 to avoid overflow.
-    difference = np.abs(image_chunk.astype(np.int16) - reference_image_chunk.astype(np.int16))
+    if hsv:
+        # Convert the image chanks to HSV.
+        # HUE values are in the range [0, 180].
+        # SATURATION and VALUE values are in the range [0, 255].
+        reference_image_chunk = cv2.cvtColor(reference_image_chunk, cv2.COLOR_RGB2HSV)
+        image_chunk = cv2.cvtColor(image_chunk, cv2.COLOR_RGB2HSV)
 
-    # Calculate the mean of the differences along the color channels.
-    pixel_differences = difference.mean(
-        axis=2,
-    )
+        # Calculate the difference between the HSV pixels.
+        # Convert the pixel to int16 to avoid overflow.
+        difference = np.abs(image_chunk.astype(np.int16) - reference_image_chunk.astype(np.int16))
+
+        # Handle the HUE channel separately.
+        # Calculate the difference between the HUE pixels.
+        hue_difference = np.minimum(
+            np.abs(difference[:, :, 0]),
+            180 - np.abs(difference[:, :, 0]),
+        )
+
+        # Apply the weights to the differences.
+        pixel_differences = (
+            1.25 * hue_difference +
+            1 * difference[:, :, 1] +
+            .5 * difference[:, :, 2]
+        )
+    else:
+        # Calculate the difference between the RGB pixels.
+        # Convert the pixel to int16 to avoid overflow.
+        difference = np.abs(image_chunk.astype(np.int16) - reference_image_chunk.astype(np.int16))
+
+        # Calculate the mean of the differences along the color channels.
+        pixel_differences = difference.mean(
+            axis=2,
+        )
 
     # Create a binary mask based on the threshold.
     binary_mask = pixel_differences > threshold

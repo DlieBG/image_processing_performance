@@ -19,6 +19,7 @@ setup(
     license='MIT',
     packages=find_packages(),
     install_requires=[
+        'opencv-python',
         'pydantic',
         'openpyxl',
         'pillow',
