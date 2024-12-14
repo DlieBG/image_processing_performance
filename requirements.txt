@@ -3,4 +3,5 @@ openpyxl
 pillow
 pandas
 click
+numpy
 rich
