@@ -25,8 +25,10 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
 
         Args:
             threshold (float): Threshold value for background subtraction.
-            input_path (Path): Input path for image file.
-            output_path (Path): Output path for image file.
+            hsv (bool): Flag to convert the image to HSV.
+            reference_image_path (Path): Reference path for image file.
+            input_image_path (Path): Input path for image file.
+            output_image_path (Path): Output path for image file.
 
         Raises:
             ValueError: If the reference image and the input image do not have the same dimensions.

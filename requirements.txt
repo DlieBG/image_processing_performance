@@ -1,6 +1,8 @@
+opencv-python
 pydantic
 openpyxl
 pillow
 pandas
 click
+numpy
 rich
