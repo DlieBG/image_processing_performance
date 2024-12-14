@@ -9,7 +9,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.numpy.utils.image import open_project_image, save_project_image
-from joblib import Parallel, delayed
+from concurrent.futures import ThreadPoolExecutor
 from src.numpy.utils.log import log
 import numpy.typing as npt
 from pathlib import Path
@@ -116,15 +116,18 @@ def background_subtraction(threshold: float, hsv: bool, threads: int, reference_
     reference_image_chunks = np.array_split(reference_image, threads, axis=0)
 
     # Process each chunk in parallel.
-    results = Parallel(n_jobs=threads)(
-        delayed(__process_chunk)(
-            threshold,
-            hsv,
-            reference_image_chunk,
-            image_chunk,
+    with ThreadPoolExecutor(
+        max_workers=threads,
+    ) as executor:
+        results = list(
+            executor.map(
+                __process_chunk,
+                [threshold] * threads,
+                [hsv] * threads,
+                reference_image_chunks,
+                image_chunks
+            )
         )
-            for reference_image_chunk, image_chunk in zip(reference_image_chunks, image_chunks)
-    )
 
     # Combine the chunks back into a single image.
     processed_image = np.vstack(results)
