@@ -43,6 +43,14 @@ def cli():
     show_default=True,
     help='HSV mode for background subtraction.'
 )
+@click.option(
+    '--hsv-weights',
+    '-w',
+    type=tuple[float, float, float],
+    default=(0.75, 0.3, 0.2),
+    show_default=True,
+    help='HSV weights for background subtraction.'
+)
 @click.argument(
     'reference_image_file',
     type=click.Path(
@@ -60,7 +68,7 @@ def cli():
     required=True,
     nargs=-1,
 )
-def background_subtraction(threshold: float, hsv: bool, reference_image_file: str, image_files: tuple[str, ...]):
+def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float, float, float], reference_image_file: str, image_files: tuple[str, ...]):
     """ Background Subtraction on a set of images.
 
         Author:
@@ -68,6 +76,9 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_file: st
 
         Args:
             threshold (float): Threshold value for background subtraction.
+            hsv (bool): HSV mode for background subtraction.
+            hsv_weights (tuple[float, float, float]): HSV weights for background subtraction.
+            reference_image_file (str): Reference image file.
             image_files (tuple[str, ...]): List of image files.
     """
     # Convert the reference image file to a Path object.
@@ -81,6 +92,7 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_file: st
         background_subtraction_algorithm(
             threshold=threshold,
             hsv=hsv,
+            hsv_weights=hsv_weights,
             reference_image_path=reference_image_path,
             input_image_path=image_path,
             output_image_path=image_path.parent / f'background_subtraction_{image_path.name}',

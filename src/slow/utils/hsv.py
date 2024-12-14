@@ -107,7 +107,7 @@ def rgb_to_hsv_image(rgb_image: Image) -> HSVImage:
         pixels=hsv_pixels,
     )
 
-def weighted_hsv_distance(pixel1: HSVPixel, pixel2: HSVPixel, hue_weight: float = 1, saturation_weight: float = 1, value_weight: float = 1) -> float:
+def weighted_hsv_distance(pixel1: HSVPixel, pixel2: HSVPixel, weights: tuple[float, float, float]) -> float:
     """ Calculate the weighted HSV distance between two HSV pixels.
         Algorithm reference from https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=a451df3b73675133370e8d3238643a4c6106cbd0.
         Facing hue wrapping issue, the algorithm is adjusted to consider the shortest distance between two hue values.
@@ -118,9 +118,7 @@ def weighted_hsv_distance(pixel1: HSVPixel, pixel2: HSVPixel, hue_weight: float 
         Args:
             pixel1 (HSVPixel): First HSV pixel.
             pixel2 (HSVPixel): Second HSV pixel.
-            hue_weight (float): Weight for the hue distance.
-            saturation_weight (float): Weight for the saturation distance.
-            value_weight (float): Weight for the value distance.
+            weights (tuple[float, float, float]): Weights for the HSV distance calculation.
 
         Returns:
             float: Weighted HSV distance in the range [0, 255].
@@ -133,4 +131,4 @@ def weighted_hsv_distance(pixel1: HSVPixel, pixel2: HSVPixel, hue_weight: float 
     delta_value = abs(pixel1.value - pixel2.value)
 
     # Calculate the weighted HSV distance and return it.
-    return math.sqrt(hue_weight * delta_hue ** 2 + saturation_weight * delta_saturation ** 2 + value_weight * delta_value ** 2) * 255
+    return math.sqrt(weights[0] * delta_hue ** 2 + weights[1] * delta_saturation ** 2 + weights[2] * delta_value ** 2) * 255

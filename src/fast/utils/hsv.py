@@ -10,7 +10,7 @@ Author Benedikt SCHWERING <bes9584@thi.de>
 """
 import math
 
-def rgb_to_hsv(rgb_pixel: tuple[int, int, int]) -> tuple[int, int, int]:
+def rgb_to_hsv_pixel(rgb_pixel: tuple[int, int, int]) -> tuple[int, int, int]:
     """ Convert an RGB pixel to an HSV pixel.
         Algorithm reference from http://alvyray.com/Papers/CG/color78.pdf.
         Algorithm reference from https://www.rapidtables.com/convert/color/rgb-to-hsv.html.
@@ -71,30 +71,7 @@ def rgb_to_hsv(rgb_pixel: tuple[int, int, int]) -> tuple[int, int, int]:
         value,
     )
 
-def rgb_to_hsv_image(rgb_image: tuple[int, int, list[tuple[int, int, int]]]) -> tuple[int, int, list[tuple[int, int, int]]]:
-    """ Convert an RGB image to an HSV image.
-
-        Author:
-            Benedikt Schwering <bes9584@thi.de>
-
-        Args:
-            rgb_image (tuple[int, int, list[tuple[int, int, int]]]): RGB image.
-
-        Returns:
-            tuple[int, int, list[tuple[int, int, int]]]: HSV image.
-    """
-    # Create a new HSV image and return it.
-    # Use list comprehension to convert each RGB pixel to an HSV pixel.
-    return (
-        rgb_image[0],
-        rgb_image[1],
-        [
-            rgb_to_hsv(rgb_pixel) 
-                for rgb_pixel in rgb_image[2]
-        ],
-    )
-
-def weighted_hsv_distance(pixel1: tuple[int, int, int], pixel2: tuple[int, int, int], hue_weight: float = 1, saturation_weight: float = 1, value_weight: float = 1) -> float:
+def weighted_hsv_distance(pixel1: tuple[int, int, int], pixel2: tuple[int, int, int], weights: tuple[float, float, float]) -> float:
     """ Calculate the weighted HSV distance between two HSV pixels.
         Algorithm reference from https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=a451df3b73675133370e8d3238643a4c6106cbd0.
         Facing hue wrapping issue, the algorithm is adjusted to consider the shortest distance between two hue values.
@@ -105,9 +82,7 @@ def weighted_hsv_distance(pixel1: tuple[int, int, int], pixel2: tuple[int, int, 
         Args:
             pixel1 (tuple[int, int, int]): First HSV pixel.
             pixel2 (tuple[int, int, int]): Second HSV pixel.
-            hue_weight (float): Weight for the hue distance.
-            saturation_weight (float): Weight for the saturation distance.
-            value_weight (float): Weight for the value distance.
+            weights (tuple[float, float, float]): Weights for the hue, saturation, and value components.
 
         Returns:
             float: Weighted HSV distance in the range [0, 255].
@@ -120,4 +95,4 @@ def weighted_hsv_distance(pixel1: tuple[int, int, int], pixel2: tuple[int, int, 
     delta_value = abs(pixel1[2] - pixel2[2])
 
     # Calculate the weighted HSV distance and return it.
-    return math.sqrt(hue_weight * delta_hue ** 2 + saturation_weight * delta_saturation ** 2 + value_weight * delta_value ** 2) * 255
+    return math.sqrt(weights[0] * delta_hue ** 2 + weights[1] * delta_saturation ** 2 + weights[2] * delta_value ** 2) * 255

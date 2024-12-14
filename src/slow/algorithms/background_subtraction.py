@@ -17,7 +17,7 @@ from pathlib import Path
 WHITE_PIXEL = Pixel.white()
 BLACK_PIXEL = Pixel.black()
 
-def background_subtraction(threshold: float, hsv: bool, reference_image_path: Path, input_image_path: Path, output_image_path: Path):
+def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float, float, float], reference_image_path: Path, input_image_path: Path, output_image_path: Path):
     """ Apply Background Subtraction on an image.
 
         Author:
@@ -26,6 +26,7 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
         Args:
             threshold (float): Threshold value for background subtraction.
             hsv (bool): Flag to convert the image to HSV.
+            hsv_weights (tuple[float, float, float]): HSV weights for background subtraction.
             reference_image_path (Path): Reference path for image file.
             input_image_path (Path): Input path for image file.
             output_image_path (Path): Output path for image file.
@@ -72,9 +73,7 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
                 difference = weighted_hsv_distance(
                     pixel1=hsv_reference_pixel,
                     pixel2=hsv_pixel,
-                    hue_weight=.6,
-                    saturation_weight=.6,
-                    value_weight=.1,
+                    weights=hsv_weights,
                 )
             else:
                 reference_pixel = reference_image.pixels[row][column]

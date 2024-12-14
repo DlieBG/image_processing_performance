@@ -9,14 +9,14 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.fast.utils.image import open_project_image, save_project_image
-from src.fast.utils.hsv import rgb_to_hsv_image, weighted_hsv_distance
+from src.fast.utils.hsv import rgb_to_hsv_pixel, weighted_hsv_distance
 from src.fast.utils.log import log
 from pathlib import Path
 
 WHITE_PIXEL = (255, 255, 255)
 BLACK_PIXEL = (0, 0, 0)
 
-def background_subtraction(threshold: float, hsv: bool, reference_image_path: Path, input_image_path: Path, output_image_path: Path):
+def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float, float, float], reference_image_path: Path, input_image_path: Path, output_image_path: Path):
     """ Apply Background Subtraction on an image.
 
         Author:
@@ -25,6 +25,7 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
         Args:
             threshold (float): Threshold value for background subtraction.
             hsv (bool): Flag to convert the image to HSV.
+            hsv_weights (tuple[float, float, float]): Weights for the HSV values.
             reference_image_path (Path): Reference path for image file.
             input_image_path (Path): Input path for image file.
             output_image_path (Path): Output path for image file.
@@ -47,30 +48,22 @@ def background_subtraction(threshold: float, hsv: bool, reference_image_path: Pa
     if reference_image[0] != image[0] or reference_image[1] != image[1]:
         raise ValueError('The reference image and the input image must have the same dimensions.')
 
-    # Convert the reference image and the input image to HSV if the flag is set.
-    # This provides better time tracking for the algorithm.
-    if hsv:
-        hsv_reference_image = rgb_to_hsv_image(
-            rgb_image=reference_image,
-        )
-        hsv_image = rgb_to_hsv_image(
-            rgb_image=image,
-        )
-        log('finish hsv conversion')
-
     # Iterate over each pixel in the image.
     for index in range(image[0] * image[1]):
         if hsv:
-            hsv_reference_pixel = hsv_reference_image[2][index]
-            hsv_pixel = hsv_image[2][index]
+            # Convert the RGB pixels to HSV without saving the whole image.
+            hsv_reference_pixel = rgb_to_hsv_pixel(
+                rgb_pixel=reference_image[2][index],
+            )
+            hsv_pixel = rgb_to_hsv_pixel(
+                rgb_pixel=image[2][index],
+            )
 
             # Calculate the difference between the HSV pixels.
             difference = weighted_hsv_distance(
                 pixel1=hsv_reference_pixel,
                 pixel2=hsv_pixel,
-                hue_weight=.6,
-                saturation_weight=.6,
-                value_weight=.1,
+                weights=hsv_weights,
             )
         else:
             reference_pixel = reference_image[2][index]

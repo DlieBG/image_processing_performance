@@ -44,6 +44,14 @@ def cli():
     help='HSV mode for background subtraction.'
 )
 @click.option(
+    '--hsv-weights',
+    '-w',
+    type=tuple[float, float, float],
+    default=(0.75, 0.3, 0.2),
+    show_default=True,
+    help='HSV weights for background subtraction.'
+)
+@click.option(
     '--threads',
     '-m',
     type=int,
@@ -68,7 +76,7 @@ def cli():
     required=True,
     nargs=-1,
 )
-def background_subtraction(threshold: float, hsv: bool, threads: int, reference_image_file: str, image_files: tuple[str, ...]):
+def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float, float, float], threads: int, reference_image_file: str, image_files: tuple[str, ...]):
     """ Background Subtraction on a set of images.
 
         Author:
@@ -77,6 +85,7 @@ def background_subtraction(threshold: float, hsv: bool, threads: int, reference_
         Args:
             threshold (float): Threshold value for background subtraction.
             hsv (bool): Flag to convert the image to HSV.
+            hsv_weights (tuple[float, float, float]): Weights for the HSV channels.
             threads (int): Number of threads to use for parallel processing.
             reference_image_file (str): Reference image file.
             image_files (tuple[str, ...]): List of image files.
@@ -92,6 +101,7 @@ def background_subtraction(threshold: float, hsv: bool, threads: int, reference_
         background_subtraction_algorithm(
             threshold=threshold,
             hsv=hsv,
+            hsv_weights=hsv_weights,
             threads=threads,
             reference_image_path=reference_image_path,
             input_image_path=image_path,

@@ -18,7 +18,7 @@ import cv2
 
 WHITE_PIXEL = [255, 255, 255]
 
-def __process_chunk(threshold: float, hsv: bool, reference_image_chunk, image_chunk) -> npt.NDArray[np.uint8]:
+def __process_chunk(threshold: float, hsv: bool, hsv_weights: tuple[float, float, float], reference_image_chunk: npt.NDArray[np.uint8], image_chunk: npt.NDArray[np.uint8]) -> npt.NDArray[np.uint8]:
     """ Process a chunk of an image.
 
         Author:
@@ -27,6 +27,7 @@ def __process_chunk(threshold: float, hsv: bool, reference_image_chunk, image_ch
         Args:
             threshold (float): Threshold value for background subtraction.
             hsv (bool): Flag to convert the image to HSV.
+            hsv_weights (tuple[float, float, float]): Weights for the HSV channels.
             reference_image_chunk (np.array): Chunk of the reference image.
             image_chunk (np.array): Chunk of the image.
 
@@ -53,9 +54,9 @@ def __process_chunk(threshold: float, hsv: bool, reference_image_chunk, image_ch
 
         # Apply the weights to the differences.
         pixel_differences = (
-            1.25 * hue_difference +
-            1 * difference[:, :, 1] +
-            .5 * difference[:, :, 2]
+            hsv_weights[0] * hue_difference +
+            hsv_weights[1] * difference[:, :, 1] +
+            hsv_weights[2] * difference[:, :, 2]
         )
     else:
         # Calculate the difference between the RGB pixels.
@@ -79,7 +80,7 @@ def __process_chunk(threshold: float, hsv: bool, reference_image_chunk, image_ch
     # Return the processed chunk.
     return result_chunk
 
-def background_subtraction(threshold: float, hsv: bool, threads: int, reference_image_path: Path, input_image_path: Path, output_image_path: Path):
+def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float, float, float], threads: int, reference_image_path: Path, input_image_path: Path, output_image_path: Path):
     """ Apply Background Subtraction on an image.
 
         Author:
@@ -88,6 +89,7 @@ def background_subtraction(threshold: float, hsv: bool, threads: int, reference_
         Args:
             threshold (float): Threshold value for background subtraction.
             hsv (bool): Flag to convert the image to HSV.
+            hsv_weights (tuple[float, float, float]): Weights for the HSV channels.
             threads (int): Number of threads to use for parallel processing.
             reference_image_path (Path): Reference path for image file.
             input_image_path (Path): Input path for image file.
@@ -124,6 +126,7 @@ def background_subtraction(threshold: float, hsv: bool, threads: int, reference_
                 __process_chunk,
                 [threshold] * threads,
                 [hsv] * threads,
+                [hsv_weights] * threads,
                 reference_image_chunks,
                 image_chunks
             )
