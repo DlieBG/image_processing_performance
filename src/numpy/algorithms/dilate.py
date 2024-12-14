@@ -8,12 +8,12 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.numpy.utils.image import open_project_image, save_project_image, create_project_image, any_neighbors_equal_pixel
+from src.numpy.utils.image import open_project_image, save_project_image
 from src.numpy.utils.log import log
 from pathlib import Path
+import numpy as np
 
-WHITE_PIXEL = (255, 255, 255)
-BLACK_PIXEL = (0, 0, 0)
+WHITE_PIXEL = [255, 255, 255]
 
 def dilate(radius: int, input_image_path: Path, output_image_path: Path):
     """ Apply Dilation on an image.
@@ -32,26 +32,36 @@ def dilate(radius: int, input_image_path: Path, output_image_path: Path):
     )
     log('finish open image')
 
-    # Create an black project image as output image.
-    output_image = create_project_image(
-        width=input_image[0],
-        height=input_image[1],
-        init_pixel=BLACK_PIXEL,
-    )
+    # Create a black project image as output image.
+    output_image = np.zeros_like(input_image)
     log('finish create output image')
 
-    # Iterate over each pixel in the image.
-    for index in range(input_image[0] * input_image[1]):
-        # Check if any neighbor pixels is black.
-        if any_neighbors_equal_pixel(
-            image=input_image,
-            radius=radius,
-            index=index,
-            check_pixel=WHITE_PIXEL,
-        ):
-            # Set the pixel to white.
-            output_image[2][index] = WHITE_PIXEL
-    log('finish dilate')
+    # Convert the image to a boolean mask where white pixels are True.
+    mask = np.all(
+        input_image == WHITE_PIXEL,
+        axis=-1,
+    )
+
+    # Pad the mask to handle border conditions.
+    padded_mask = np.pad(
+        mask,
+        pad_width=radius,
+        mode='constant',
+        constant_values=False,
+    )
+
+    # Use a sliding window to check the neighborhood for white pixels.
+    for dy in range(-radius, radius + 1):
+        for dx in range(-radius, radius + 1):
+            # Shift the padded mask and accumulate.
+            # Set the eroded mask to True if any pixel in the neighborhood is white.
+            mask |= padded_mask[
+                radius + dy:radius + dy + mask.shape[0],
+                radius + dx:radius + dx + mask.shape[1],
+            ]
+
+    # Where the eroded mask is true, set the output image pixels to white.
+    output_image[mask] = WHITE_PIXEL
 
     # Save the image to the output path.
     save_project_image(
