@@ -62,6 +62,7 @@ def dilate(radius: int, input_image_path: Path, output_image_path: Path):
 
     # Where the eroded mask is true, set the output image pixels to white.
     output_image[mask] = WHITE_PIXEL
+    log('finish dilate')
 
     # Save the image to the output path.
     save_project_image(

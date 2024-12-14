@@ -66,6 +66,7 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
 
     # Where the eroded mask is true, set the output image pixels to black.
     output_image[mask] = BLACK_PIXEL
+    log('finish erode')
 
     # Save the image to the output path.
     save_project_image(
