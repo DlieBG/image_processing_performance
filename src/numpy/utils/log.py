@@ -8,9 +8,9 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from rich import print
 from datetime import datetime
-import inspect, time
+from rich import print
+import inspect
 
 reference = datetime.now()
 
