@@ -1,22 +1,34 @@
 # Image Processing Performance
 Dieses Repository beinhaltet die praktische Arbeit zum Module Intelligente Robotik an der THI im Wintersemester 2024/25.\
-Thema der Arbeit ist der Performance Vergleich von Bildverarbeitungsalgorithmen basierend auf verschiedenen Implementierungen, Architekturen und Bildsampeln.
+Thema der Arbeit ist der Performance Vergleich von Bildverarbeitungsalgorithmen basierend auf verschiedenen Implementierungen, Architekturen und Bildsampeln.\
+Hier befindet sich die Sammlung der Python basierten Implementierungen.\
+Die folgenden Varianten wurden umgesetzt:
+1. Intuitiver Ansatz mit Pydantic Objekten und ohne Optimierungen (`ipp_slow`)
+2. Optimierter Ansatz mit schlankeren Datenstrukturen (`ipp_fast`)
+3. Multithreading Implementierung mit Numpy (`ipp_numpy`)
 
 ## Installation
 1. Klonen Sie das Repository.
-2. Navigieren Sie in den `python` Ordner.
-```bash
-cd python
-```
-3. Installieren Sie die Abhängigkeiten.
+2. Installieren Sie die Abhängigkeiten und die CLI.
 ```bash
 pip install -e .
 ```
 
 ## Verwendung
-Führen Sie die `ipp_python` CLI Anwendung aus.
+Alle drei Varianten sind per CLI aufrufbar und dokumentiert.
+### `ipp_slow`
 ```bash
-ipp_python --help
+ipp_slow --help
+```
+
+### `ipp_fast`
+```bash
+ipp_fast --help
+```
+
+### `ipp_numpy`
+```bash
+ipp_numpy --help
 ```
 
 ## Time Tracking
@@ -33,70 +45,32 @@ Ein Besipiel mit echten Werten sieht so aus.
 [0.364496552] 1 (open_project_image) finish extract flat data
 ```
 Dabei gibt der Layer an, in welcher Schicht das Event aufgetreten ist.\
-Beispielsweise kann der übergeordnete Algorithmus eine utils Funktion aufrufen, welche dann auf der zweiten Ebene (Layer 1) loggt.
+Beispielsweise kann der übergeordnete Algorithmus eine utils Funktion aufrufen, welche dann auf der zweiten Ebene (Layer 1) loggt.\
+Hier werden nur die Events auf Layer 0 dokumentiert, da diese zwischen den Algorithmen einheitlich sein müssen, um eine Vergleichbarkeit zu schaffen.
 
 ### Background Subtraction
 Für die Background Subtraction fallen die folgenden Events an.\
 Die Events auf Layer 1 kann je nach Implementierung variieren.
-| Layer 0 | Layer 1 | Event |
-|---|---|---|
-| | 1 | finish open pil image |
-| | 1 | finish convert pil image |
-| | 1 | finish extract flat data |
-| | 1 | finish create flat pixels |
-| | 1 | finish reshape pixels |
-| 0 | | finish open reference image |
-| | 1 | finish open pil image |
-| | 1 | finish convert pil image |
-| | 1 | finish extract flat data |
-| | 1 | finish create flat pixels |
-| | 1 | finish reshape pixels |
-| 0 | | finish open image |
-| 0 | | finish hsv conversion |
-| 0 | | finish background subtraction |
-| | 1 | finish create pil image |
-| | 1 | finish reshape flat pixels |
-| | 1 | finish create flat data |
-| | 1 | finish put data to pil image |
-| | 1 | finish save pil image |
-| 0 | | finish save image |
+| Layer 0 | Event |
+|---|---|
+| 0 | finish preprocessing |
+| 0 | finish background subtraction |
+| 0 | finish postprocessing |
 
 ### Erode
 Für die Erosion fallen die folgenden Events an.\
 Die Events auf Layer 1 kann je nach Implementierung variieren.
-| Layer 0 | Layer 1 | Event |
-|---|---|---|
-| | 1 | finish open pil image |
-| | 1 | finish convert pil image |
-| | 1 | finish extract flat data |
-| | 1 | finish create flat pixels |
-| | 1 | finish reshape pixels |
-| 0 | | finish open image |
-| 0 | | finish create output image |
-| 0 | | finish erode |
-| | 1 | finish create pil image |
-| | 1 | finish reshape flat pixels |
-| | 1 | finish create flat data |
-| | 1 | finish put data to pil image |
-| | 1 | finish save pil image |
-| 0 | | finish save image |
+| Layer 0 | Event |
+|---|---|
+| 0 | finish preprocessing |
+| 0 | finish background subtraction |
+| 0 | finish postprocessing |
 
 ### Dilate
 Für die Dilation fallen die folgenden Events an.\
 Die Events auf Layer 1 kann je nach Implementierung variieren.
-| Layer 0 | Layer 1 | Event |
-|---|---|---|
-| | 1 | finish open pil image |
-| | 1 | finish convert pil image |
-| | 1 | finish extract flat data |
-| | 1 | finish create flat pixels |
-| | 1 | finish reshape pixels |
-| 0 | | finish open image |
-| 0 | | finish create output image |
-| 0 | | finish dilate |
-| | 1 | finish create pil image |
-| | 1 | finish reshape flat pixels |
-| | 1 | finish create flat data |
-| | 1 | finish put data to pil image |
-| | 1 | finish save pil image |
-| 0 | | finish save image |
+| Layer 0 | Event |
+|---|---|
+| 0 | finish preprocessing |
+| 0 | finish background subtraction |
+| 0 | finish postprocessing |
