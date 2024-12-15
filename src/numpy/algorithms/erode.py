@@ -9,7 +9,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.numpy.utils.image import open_project_image, save_project_image
-from src.numpy.utils.log import log
+from src.parser.utils.log import log
 from pathlib import Path
 import numpy as np
 
@@ -30,7 +30,6 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
     input_image = open_project_image(
         image_path=input_image_path,
     )
-    log('finish open image')
 
     # Create a white project image as output image.
     output_image = np.full_like(
@@ -38,7 +37,7 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
         255,
         dtype=np.uint8,
     )
-    log('finish create output image')
+    log('finish preprocessing')
 
     # Convert the image to a boolean mask where black pixels are True.
     mask = np.all(
@@ -73,4 +72,4 @@ def erode(radius: int, input_image_path: Path, output_image_path: Path):
         image_path=output_image_path,
         project_image=output_image,
     )
-    log('finish save image')
+    log('finish postprocessing')

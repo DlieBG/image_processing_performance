@@ -10,7 +10,7 @@ Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.numpy.utils.image import open_project_image, save_project_image
 from concurrent.futures import ThreadPoolExecutor
-from src.numpy.utils.log import log
+from src.parser.utils.log import log
 import numpy.typing as npt
 from pathlib import Path
 import numpy as np
@@ -102,12 +102,10 @@ def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float
     reference_image = open_project_image(
         image_path=reference_image_path,
     )
-    log('finish open reference image')
-
     image = open_project_image(
         image_path=input_image_path,
     )
-    log('finish open image')
+    log('finish preprocessing')
 
     # Check if the reference image and the input image have the same dimensions.
     if reference_image.shape != image.shape:
@@ -141,4 +139,4 @@ def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float
         image_path=output_image_path,
         project_image=processed_image,
     )
-    log('finish save image')
+    log('finish postprocessing')

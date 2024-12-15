@@ -11,7 +11,7 @@ Author Benedikt SCHWERING <bes9584@thi.de>
 from src.slow.utils.image import open_project_image, save_project_image
 from src.slow.utils.hsv import rgb_to_hsv_image, weighted_hsv_distance
 from src.slow.models.image import Pixel
-from src.slow.utils.log import log
+from src.parser.utils.log import log
 from pathlib import Path
 
 WHITE_PIXEL = Pixel.white()
@@ -38,12 +38,10 @@ def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float
     reference_image = open_project_image(
         image_path=reference_image_path,
     )
-    log('finish open reference image')
-
     image = open_project_image(
         image_path=input_image_path,
     )
-    log('finish open image')
+    log('finish preprocessing')
 
     # Check if the reference image and the input image have the same dimensions.
     if reference_image.width != image.width or reference_image.height != image.height:
@@ -58,7 +56,6 @@ def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float
         hsv_image = rgb_to_hsv_image(
             rgb_image=image,
         )
-        log('finish hsv conversion')
 
     # Iterate over each pixel in the image.
     for row in range(image.height):
@@ -95,4 +92,4 @@ def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float
         image_path=output_image_path,
         project_image=image,
     )
-    log('finish save image')
+    log('finish postprocessing')

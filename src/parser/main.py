@@ -8,7 +8,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.parser.utils.dataframe import convert_to_dataframe, merge_all
+from src.parser.utils.dataframe import convert_to_dataframe
 from pathlib import Path
 import pandas as pd
 import click
@@ -36,7 +36,7 @@ def cli():
     nargs=-1,
 )
 def parse(time_tracking_files: tuple[str, ...]):
-    """ Parse time tracking files to csv format.
+    """ Parse time tracking files to Excel format.
     
         Author:
             Benedikt Schwering <bes9584@thi.de>

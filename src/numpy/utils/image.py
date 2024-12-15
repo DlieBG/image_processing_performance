@@ -8,8 +8,8 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
-from src.numpy.utils.log import log
 from PIL import Image as PILImage
+from src.parser.utils.log import log
 import numpy.typing as npt
 from pathlib import Path
 import numpy as np

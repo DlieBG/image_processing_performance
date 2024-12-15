@@ -9,7 +9,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.slow.models.image import Image, Pixel
-from src.slow.utils.log import log
+from src.parser.utils.log import log
 from PIL import Image as PILImage
 from pathlib import Path
 

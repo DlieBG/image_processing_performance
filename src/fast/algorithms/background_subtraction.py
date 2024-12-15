@@ -10,7 +10,7 @@ Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.fast.utils.image import open_project_image, save_project_image
 from src.fast.utils.hsv import rgb_to_hsv_pixel, weighted_hsv_distance
-from src.fast.utils.log import log
+from src.parser.utils.log import log
 from pathlib import Path
 
 WHITE_PIXEL = (255, 255, 255)
@@ -37,12 +37,10 @@ def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float
     reference_image = open_project_image(
         image_path=reference_image_path,
     )
-    log('finish open reference image')
-
     image = open_project_image(
         image_path=input_image_path,
     )
-    log('finish open image')
+    log('finish preprocessing')
 
     # Check if the reference image and the input image have the same dimensions.
     if reference_image[0] != image[0] or reference_image[1] != image[1]:
@@ -85,4 +83,4 @@ def background_subtraction(threshold: float, hsv: bool, hsv_weights: tuple[float
         image_path=output_image_path,
         project_image=image,
     )
-    log('finish save image')
+    log('finish postprocessing')

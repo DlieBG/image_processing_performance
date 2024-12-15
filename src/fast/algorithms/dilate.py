@@ -9,7 +9,7 @@ It can be found in the LICENSE file or at https://opensource.org/licenses/MIT.
 Author Benedikt SCHWERING <bes9584@thi.de>
 """
 from src.fast.utils.image import open_project_image, save_project_image, create_project_image, any_neighbors_equal_pixel
-from src.fast.utils.log import log
+from src.parser.utils.log import log
 from pathlib import Path
 
 WHITE_PIXEL = (255, 255, 255)
@@ -30,7 +30,6 @@ def dilate(radius: int, input_image_path: Path, output_image_path: Path):
     input_image = open_project_image(
         image_path=input_image_path,
     )
-    log('finish open image')
 
     # Create an black project image as output image.
     output_image = create_project_image(
@@ -38,7 +37,7 @@ def dilate(radius: int, input_image_path: Path, output_image_path: Path):
         height=input_image[1],
         init_pixel=BLACK_PIXEL,
     )
-    log('finish create output image')
+    log('finish preprocessing')
 
     # Iterate over each pixel in the image.
     for index in range(input_image[0] * input_image[1]):
@@ -58,4 +57,4 @@ def dilate(radius: int, input_image_path: Path, output_image_path: Path):
         image_path=output_image_path,
         project_image=output_image,
     )
-    log('finish save image')
+    log('finish postprocessing')

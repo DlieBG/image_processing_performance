@@ -63,7 +63,7 @@ Die Events auf Layer 1 kann je nach Implementierung variieren.
 | Layer 0 | Event |
 |---|---|
 | 0 | finish preprocessing |
-| 0 | finish background subtraction |
+| 0 | finish erode |
 | 0 | finish postprocessing |
 
 ### Dilate
@@ -72,5 +72,5 @@ Die Events auf Layer 1 kann je nach Implementierung variieren.
 | Layer 0 | Event |
 |---|---|
 | 0 | finish preprocessing |
-| 0 | finish background subtraction |
+| 0 | finish dilate |
 | 0 | finish postprocessing |
