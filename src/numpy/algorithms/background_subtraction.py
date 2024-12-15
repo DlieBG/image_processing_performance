@@ -47,16 +47,17 @@ def __process_chunk(threshold: float, hsv: bool, hsv_weights: tuple[float, float
 
         # Handle the HUE channel separately.
         # Calculate the difference between the HUE pixels.
+        # Normalize the difference to the range [0, 255].
         hue_difference = np.minimum(
             np.abs(difference[:, :, 0]),
             180 - np.abs(difference[:, :, 0]),
-        )
+        ) / 180 * 255
 
-        # Apply the weights to the differences.
+        # Apply the weights to the differences and calculate the mean.
         pixel_differences = (
-            hsv_weights[0] * hue_difference +
-            hsv_weights[1] * difference[:, :, 1] +
-            hsv_weights[2] * difference[:, :, 2]
+            hsv_weights[0] * hue_difference / 3 +
+            hsv_weights[1] * difference[:, :, 1] / 3 +
+            hsv_weights[2] * difference[:, :, 2] / 3
         )
     else:
         # Calculate the difference between the RGB pixels.
@@ -64,8 +65,10 @@ def __process_chunk(threshold: float, hsv: bool, hsv_weights: tuple[float, float
         difference = np.abs(image_chunk.astype(np.int16) - reference_image_chunk.astype(np.int16))
 
         # Calculate the mean of the differences along the color channels.
-        pixel_differences = difference.mean(
-            axis=2,
+        pixel_differences = (
+            difference[:, :, 0] / 3 +
+            difference[:, :, 1] / 3 +
+            difference[:, :, 2] / 3
         )
 
     # Create a binary mask based on the threshold.

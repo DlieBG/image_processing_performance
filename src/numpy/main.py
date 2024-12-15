@@ -46,7 +46,7 @@ def cli():
 @click.option(
     '--hsv-weights',
     '-w',
-    type=tuple[float, float, float],
+    type=(float, float, float),
     default=(0.75, 0.3, 0.2),
     show_default=True,
     help='HSV weights for background subtraction.'
