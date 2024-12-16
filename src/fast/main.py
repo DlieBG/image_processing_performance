@@ -31,7 +31,7 @@ def cli():
     '--threshold',
     '-t',
     type=float,
-    default=7.0,
+    default=25.0,
     show_default=True,
     help='Threshold value for background subtraction.'
 )
