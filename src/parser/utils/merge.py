@@ -34,7 +34,7 @@ def merge_dataframes(dataframes: list[tuple[str, pd.DataFrame]]) -> dict[pd.Data
     # Group DataFrames by the used algorithm (second message - "finish <algorithm name>")
     grouped_dfs = {}
     for df in dataframes:
-        key = df[1]['Message'].iloc[1].replace('finish ', '')
+        key = df[1]['Message'].iloc[1].replace('finish ', '').strip()
         if key not in grouped_dfs:
             grouped_dfs[key] = []
 
@@ -45,12 +45,14 @@ def merge_dataframes(dataframes: list[tuple[str, pd.DataFrame]]) -> dict[pd.Data
     for key, dfs in grouped_dfs.items():
         # Copy the first DataFrame and rename the timestamp column
         merged_df = dfs[0][1].copy()
+        merged_df['Message'] = merged_df['Message'].str.strip()
         merged_df.rename(columns={'Timestamp': dfs[0][0]}, inplace=True)
 
         # Merge the remaining DataFrames and rename the timestamp columns
         for df in dfs[1:]:
             # Only keep the relevant columns message and timestamp
             temp_df = df[1][['Message', 'Timestamp']].copy()
+            temp_df['Message'] = temp_df['Message'].str.strip()
             temp_df.rename(columns={'Timestamp': df[0]}, inplace=True)
 
             # Merge the DataFrames based on the message column
